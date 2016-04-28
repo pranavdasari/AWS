@@ -1,0 +1,507 @@
+swagger: '2.0'
+info:
+  title: DIY Data Manager
+  description: DIY Data management subsystem API
+  version: 1.0.0
+basePath: /api/v2
+schemes:
+  - http
+produces:
+  - application/json
+  - text/plain
+paths:
+  /items:
+    parameters:
+      - $ref: "#/parameters/token"
+    get:
+      tags: 
+      - Items
+      summary: Returns all the items in the database.
+      description: Gets a list of all the items in the database, along with each description, and returns a JSON array containing all the information.
+      produces:
+        - text/plain
+        - application/json
+      responses:
+        200:
+          description: array of items
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Item'
+        400:
+          $ref: "#/responses/Standard400ErrorResponse"
+        403:
+          $ref: "#/responses/Standard403ErrorResponse"
+        404:
+          $ref: "#/responses/Standard404ErrorResponse"
+        500:
+          $ref: "#/responses/Standard500ErrorResponse"
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      tags: 
+      - Items
+      summary: Adds an item to the database.
+      description: Accepts a JSON file with the item's description, and adds the item to the database. Returns the new item to the requester.
+      produces:
+        - text/plain
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          description: description of item to add to database
+          required: true
+          schema:
+            description: item description key-value pairs
+            type: array
+            items:
+              type: string
+      responses:
+        200:
+          description: new item added
+          schema:
+            $ref: '#/definitions/Item'
+        400:
+          $ref: "#/responses/Standard400ErrorResponse"
+        403:
+          $ref: "#/responses/Standard403ErrorResponse"
+        404:
+          $ref: "#/responses/Standard404ErrorResponse"
+        500:
+          $ref: "#/responses/Standard500ErrorResponse"
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      tags: 
+      - Items
+      summary: Updates an item in the database
+      description: Accepts a JSON file with the item's information, and updates the item's information in the database. Returns the updated item to the requester.
+      produces:
+        - text/plain
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          description: new item information
+          required: true
+          schema:
+            $ref: '#/definitions/Item'
+      responses:
+        200:
+          description: updated item
+          schema:
+            $ref: '#/definitions/Item'
+        400:
+          $ref: "#/responses/Standard400ErrorResponse"
+        403:
+          $ref: "#/responses/Standard403ErrorResponse"
+        404:
+          $ref: "#/responses/Standard404ErrorResponse"
+        500:
+          $ref: "#/responses/Standard500ErrorResponse"
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      tags: 
+      - Items
+      summary: Deletes an item or items from the database.
+      description: Accepts a single or multiple item ids, and deletes each item from the database. Returns the list of deleted items.
+      produces:
+        - text/plain
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          description: list of item ids to delete from database
+          required: true
+          schema:
+            description: array of item ids
+            type: array
+            items:
+              type: string
+      responses:
+        200:
+          description: deleted items
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Item'
+        400:
+          $ref: "#/responses/Standard400ErrorResponse"
+        403:
+          $ref: "#/responses/Standard403ErrorResponse"
+        404:
+          $ref: "#/responses/Standard404ErrorResponse"
+        500:
+          $ref: "#/responses/Standard500ErrorResponse"
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /items/{id}:
+    parameters:
+      - $ref: "#/parameters/id"
+      - $ref: "#/parameters/token"
+    get:
+      tags: 
+      - Items
+      summary: Returns the item's information specified by the id
+      description: Gets the information of the item 
+      produces:
+        - text/plain
+        - application/json
+      responses:
+        200:
+          description: item information
+          schema:
+            $ref: '#/definitions/Item'
+        400:
+          $ref: "#/responses/Standard400ErrorResponse"
+        403:
+          $ref: "#/responses/Standard403ErrorResponse"
+        404:
+          $ref: "#/responses/Standard404ErrorResponse"
+        500:
+          $ref: "#/responses/Standard500ErrorResponse"
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      tags: 
+      - Items
+      summary: Updates an item with the id in the path in the database
+      description: Accepts a JSON file with the item's information, and updates the item's information in the database. Returns the updated item to the requester.
+      produces:
+        - text/plain
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          description: description of item to add to database
+          required: true
+          schema:
+            description: item description key-value pairs
+            type: array
+            items:
+              type: string
+      responses:
+        200:
+          description: updated item
+          schema:
+            $ref: '#/definitions/Item'
+        400:
+          $ref: "#/responses/Standard400ErrorResponse"
+        403:
+          $ref: "#/responses/Standard403ErrorResponse"
+        404:
+          $ref: "#/responses/Standard404ErrorResponse"
+        500:
+          $ref: "#/responses/Standard500ErrorResponse"
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      tags: 
+      - Items
+      summary: Deletes an item with the id in the path from the database.
+      description: Accepts single item id, and deletes the item from the database. Returns the deleted item.
+      produces:
+        - text/plain
+        - application/json
+      responses:
+        200:
+          description: deleted item
+          schema:
+            $ref: '#/definitions/Item'
+        400:
+          $ref: "#/responses/Standard400ErrorResponse"
+        403:
+          $ref: "#/responses/Standard403ErrorResponse"
+        404:
+          $ref: "#/responses/Standard404ErrorResponse"
+        500:
+          $ref: "#/responses/Standard500ErrorResponse"
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /items/{id}/parent:
+    parameters:
+      - $ref: "#/parameters/id"
+      - $ref: "#/parameters/token"
+    get:
+      tags: 
+      - Items
+      summary: Returns the parent of the item id
+      description: Gets parent id of the item specified by the id in the path.
+      produces:
+        - text/plain
+        - application/json
+      responses:
+        200:
+          description: item's parent id
+          schema:
+            type: string
+        400:
+          $ref: "#/responses/Standard400ErrorResponse"
+        403:
+          $ref: "#/responses/Standard403ErrorResponse"
+        404:
+          $ref: "#/responses/Standard404ErrorResponse"
+        500:
+          $ref: "#/responses/Standard500ErrorResponse"
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      tags: 
+      - Items
+      summary: Adds a parent to the item
+      description: Accepts the id of the parent to be added to the child and adds a row to parent-child table with the relationship.
+      produces:
+        - text/plain
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          description: id of parent
+          required: true
+          type: string
+      responses:
+        200:
+          description: parent and child relationship added
+          schema:
+            $ref: '#/definitions/ParentChild'
+        400:
+          $ref: "#/responses/Standard400ErrorResponse"
+        403:
+          $ref: "#/responses/Standard403ErrorResponse"
+        404:
+          $ref: "#/responses/Standard404ErrorResponse"
+        500:
+          $ref: "#/responses/Standard500ErrorResponse"
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      tags: 
+      - Items
+      summary: Updates a parent to the item
+      description: Accepts the id of the new parent to be added to the child and adds a row to parent-child table with the relationship, making sure to keep one parent for each child. 
+      produces:
+        - text/plain
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          description: id of parent
+          required: true
+          type: string
+      responses:
+        200:
+          description: parent and child relationship updated
+          schema:
+            $ref: '#/definitions/ParentChild'
+        400:
+          $ref: "#/responses/Standard400ErrorResponse"
+        403:
+          $ref: "#/responses/Standard403ErrorResponse"
+        404:
+          $ref: "#/responses/Standard404ErrorResponse"
+        500:
+          $ref: "#/responses/Standard500ErrorResponse"
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      tags: 
+      - Items
+      summary: Deletes a parent child relationship of the item id.
+      description: Accepts the id of the child and deletes the relationship it has with its parent.
+      produces:
+        - text/plain
+        - application/json
+      responses:
+        200:
+          description: deleted parent child relationship
+          schema:
+            $ref: '#/definitions/ParentChild'
+        400:
+          $ref: "#/responses/Standard400ErrorResponse"
+        403:
+          $ref: "#/responses/Standard403ErrorResponse"
+        404:
+          $ref: "#/responses/Standard404ErrorResponse"
+        500:
+          $ref: "#/responses/Standard500ErrorResponse"
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  /items/{id}/children:
+    parameters:
+      - $ref: "#/parameters/id"
+      - $ref: "#/parameters/token"
+    get:
+      tags: 
+      - Items
+      summary: Returns an array of children for the item id
+      description: Gets children ids of the item specified by the id in the path.
+      produces:
+        - text/plain
+        - application/json
+      responses:
+        200:
+          description: item's children ids
+          schema:
+            type: array
+            items:
+              type: string
+        400:
+          $ref: "#/responses/Standard400ErrorResponse"
+        403:
+          $ref: "#/responses/Standard403ErrorResponse"
+        404:
+          $ref: "#/responses/Standard404ErrorResponse"
+        500:
+          $ref: "#/responses/Standard500ErrorResponse"
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      tags: 
+      - Items
+      summary: Adds a child to the item
+      description: Accepts the id of the child to be added to the parent and adds a row to parent-child table with the relationship.
+      produces:
+        - text/plain
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          description: id of child
+          required: true
+          type: string
+      responses:
+        200:
+          description: parent and child relationship added
+          schema:
+            $ref: '#/definitions/ParentChild'
+        400:
+          $ref: "#/responses/Standard400ErrorResponse"
+        403:
+          $ref: "#/responses/Standard403ErrorResponse"
+        404:
+          $ref: "#/responses/Standard404ErrorResponse"
+        500:
+          $ref: "#/responses/Standard500ErrorResponse"
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      tags: 
+      - Items
+      summary: Deletes a parent child relationship of the item id.
+      description: Accepts the id of the parent and deletes the relationship it has with its children.
+      produces:
+        - text/plain
+        - application/json
+      responses:
+        200:
+          description: deleted parent child relationship
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ParentChild'
+        400:
+          $ref: "#/responses/Standard400ErrorResponse"
+        403:
+          $ref: "#/responses/Standard403ErrorResponse"
+        404:
+          $ref: "#/responses/Standard404ErrorResponse"
+        500:
+          $ref: "#/responses/Standard500ErrorResponse"
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  # /items/searchByDescription:
+  #   parameters:
+  #     - $ref: "#/parameters/token"
+  #   get:
+  #   post:
+
+definitions:
+  Error:
+    properties:
+      code:
+        type: string
+      message:
+        type: string
+  Item:
+    type: object
+    required:
+      - id
+      - description
+    properties:
+      id:
+        type: string
+      description:
+        type: array
+        items:
+          type: string
+  ParentChild:
+    type: object
+    required:
+      - parent_id
+      - child_id
+    properties:
+      parent_id:
+        type: string
+      child_id:
+        type: string
+
+responses:
+  Standard500ErrorResponse:
+    description: Unexpected Server Error
+    schema:
+      $ref: "#/definitions/Error"
+  Standard404ErrorResponse:
+    description: Resource Not Found
+    schema:
+      $ref: "#/definitions/Error"
+  Standard403ErrorResponse:
+    description: Missing or invalid access token
+    schema:
+      $ref: "#/definitions/Error"
+  Standard400ErrorResponse:
+    description: Missing or invalid JSON data
+    schema:
+      $ref: "#/definitions/Error"
+
+parameters:
+  id:
+    name: id
+    in: path
+    description: item id
+    required: true
+    type: string
+  token:
+    name: token
+    in: header
+    description: access token
+    required: true
+    type: string
